@@ -1,0 +1,8 @@
+server.name: kibana
+server.host: "0.0.0.0"
+elasticsearch.hosts: [ "http://elasticsearch:9200" ]
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "kibana123"
+xpack.security.encryptionKey: "fX!@8J!39Qm<ye3.!{Gp*:ph;8ji)}tu"
+xpack.reporting.encryptionKey: "fX!@8J!39Qm<ye3.!{Gp*:ph;8ji)}tu"
+xpack.security.session.idleTimeout: "1h"

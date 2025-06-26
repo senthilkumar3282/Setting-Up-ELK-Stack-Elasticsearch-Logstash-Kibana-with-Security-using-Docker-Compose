@@ -1,0 +1,61 @@
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=elk-cluster
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=elastic123
+      - xpack.security.enabled=true
+      - xpack.security.authc.api_key.enabled=true
+      - network.host=0.0.0.0
+      - discovery.type=single-node
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
+    networks:
+      - elk
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    container_name: kibana
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=kibana123
+      - xpack.encryptedSavedObjects.encryptionKey=fX!@8J!39Qm<ye3.!{Gp*:ph;8ji)}tu
+    volumes:
+      - ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    networks:
+      - elk
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.4
+    container_name: logstash
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - 5044:5044
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.monitoring.elasticsearch.username=logstash_system
+      - xpack.monitoring.elasticsearch.password=logstash123
+    networks:
+      - elk
+
+volumes:
+  esdata:
+
+networks:
+  elk:
+    driver: bridge
