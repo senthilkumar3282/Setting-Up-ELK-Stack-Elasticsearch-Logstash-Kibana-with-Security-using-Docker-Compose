@@ -1,7 +1,3 @@
-Here's a complete and well-structured **technical blog draft** you can publish, titled:
-
----
-
 ## 🚀 Setting Up ELK Stack (Elasticsearch, Logstash, Kibana) with Security using Docker Compose
 
 **Author**: Senthilkumar Sugumar
